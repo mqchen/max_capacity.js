@@ -79,8 +79,8 @@
 
     Capacity.prototype.isSubRangeOfAll = function(restrictions, maybeSubRange) {
         var superRangeIndex = -1;
-        for(var i = 0; i < this.restrictions.length; i++) {
-            if(this.isSubRange(this.restrictions[i], restriction)) {
+        for(var i = 0; i < restrictions.length; i++) {
+            if(this.isSubRange(restrictions[i], maybeSubRange)) {
                 superRangeIndex = i;
                 break;
             }
