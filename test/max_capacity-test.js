@@ -25,10 +25,42 @@ buster.testCase("Max capacity test", {
             assert.equals(this.capacity.getMaxCapacity(), 200);
         },
 
-        "should find max capacity with 3 restrictions, 1 more restrictive subrange of another" : function() {
+        "should find max capacity with 3 restrictions, 1 more restrictive (in range) subrange of another" : function() {
             this.capacity.addRestriction(1, 6, 100);
             this.capacity.addRestriction(7, 10, 100);
             this.capacity.addRestriction(1, 5, 100); // This should be considered
+
+            assert.equals(this.capacity.getMaxCapacity(), 200);
+        },
+
+        "should find max capacity with 3 restrictions, 1 more restrictive (in capacity only) subrange of another" : function() {
+            this.capacity.addRestriction(1, 6, 100);
+            this.capacity.addRestriction(7, 10, 100);
+            this.capacity.addRestriction(1, 6, 50); // This should be considered
+
+            assert.equals(this.capacity.getMaxCapacity(), 150);
+        },
+
+        "should find max capacity with 3 restrictions, 1 more restrictive (in capacity and range - creates suffix range) subrange of another" : function() {
+            this.capacity.addRestriction(1, 6, 100);
+            this.capacity.addRestriction(7, 10, 100);
+            this.capacity.addRestriction(1, 5, 50); // This should be considered, and first should be shifted down to 50
+
+            assert.equals(this.capacity.getMaxCapacity(), 200);
+        },
+
+        "should find max capacity with 3 restrictions, 1 more restrictive (in capacity and range - creates prefix range) subrange of another" : function() {
+            this.capacity.addRestriction(1, 6, 100);
+            this.capacity.addRestriction(7, 10, 100);
+            this.capacity.addRestriction(2, 6, 50); // This should be considered, and first should be shifted down to 50
+
+            assert.equals(this.capacity.getMaxCapacity(), 200);
+        },
+
+        "should find max capacity with 3 restrictions, 1 more restrictive (in capacity and range - creates prefix and suffix range) subrange of another" : function() {
+            this.capacity.addRestriction(1, 6, 100);
+            this.capacity.addRestriction(7, 10, 100);
+            this.capacity.addRestriction(2, 5, 50); // This should be considered, and first should be shifted down to 50
 
             assert.equals(this.capacity.getMaxCapacity(), 200);
         },

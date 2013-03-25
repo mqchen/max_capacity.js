@@ -33,8 +33,46 @@
                 this.restrictions.push(restriction);
             }
             else if(this.isMoreRestrictive(this.restrictions[superRangeIndex], restriction)) {
-                // It is subrange, replace the more lenient subrange if this is more restrictive
+                // It is subrange, replace/resize/split the more lenient subrange if this is more restrictive
+                var superRange = this.restrictions[superRangeIndex];
+
+                // Remove superrange, and add subrange
                 this.restrictions[superRangeIndex] = restriction;
+
+                // Part of superrange before subrange
+                var prefixRange = {
+                    "fromIncl" : superRange.fromIncl,
+                    "toIncl" : restriction.fromIncl
+                }
+                var suffixRange = {
+                    "fromIncl" : restriction.toIncl,
+                    "toIncl" : superRange.toIncl
+                }
+                // Calc capacity of prefix range
+
+                // Both prefix and suffix are valid
+                if(prefixRange.fromIncl < prefixRange.toIncl && suffixRange.fromIncl < suffixRange.toIncl) {
+                    var capacity = (superRange.capacity - restriction.capacity) / 2;
+                    prefixRange.capacity = capacity;
+                    suffixRange.capacity = capacity;
+
+                    this.restrictions.push(prefixRange);
+                    this.restrictions.push(suffixRange);
+                }
+                // Only prefix range valid
+                else if(prefixRange.fromIncl < prefixRange.toIncl) {
+                    var capacity = superRange.capacity - restriction.capacity;
+                    prefixRange.capacity = capacity;
+
+                    this.restrictions.push(prefixRange);
+                }
+                // Only suffix range valid
+                else if(suffixRange.fromIncl < suffixRange.toIncl) {
+                    var capacity = superRange.capacity - restriction.capacity;
+                    suffixRange.capacity = capacity;
+
+                    this.restrictions.push(suffixRange);
+                }
             }
         }
 
