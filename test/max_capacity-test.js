@@ -10,6 +10,55 @@ buster.testCase("Max capacity test", {
         this.capacity = new Capacity();
     },
 
+    "isOverlappingRangeButNotSubRange" : {
+        "should only be true if one overlaps another, without being subrange" : function() {
+
+            var r1 = {
+                "fromIncl" : 3,
+                "toIncl" : 10,
+                "capacity" : 100
+            };
+
+            var r2 = {
+                "fromIncl" : 5,
+                "toIncl" : 11,
+                "capacity" : 100
+            };
+
+            var r3 = {
+                "fromIncl" : 1,
+                "toIncl" : 5,
+                "capacity" : 100  
+            }
+
+            var r4 = { // subrange of r1
+                "fromIncl" : 5,
+                "toIncl" : 7,
+                "capacity" : 100  
+            }
+
+            assert.equals(this.capacity.isOverlappingRangeButNotSubRange(r1, r2), true);
+            assert.equals(this.capacity.isOverlappingRangeButNotSubRange(r1, r3), true);
+            assert.equals(this.capacity.isOverlappingRangeButNotSubRange(r2, r3), true);
+            assert.equals(this.capacity.isOverlappingRangeButNotSubRange(r1, r4), false);
+        }
+    },
+
+    "getOverlappingRanges" : {
+        "should find overlapping range" : function() {
+            this.capacity.addRestriction(1, 10, 100); // Should find this
+            this.capacity.addRestriction(1, 4, 100); // Should not find this
+            this.capacity.addRestriction(12, 14, 100); // Should not find this
+            var overlapping = {
+                "fromIncl" : 5,
+                "toIncl" : 11,
+                "capacity" : 100
+            };
+
+            assert.equals(this.capacity.getOverlappingRanges(this.capacity.restrictions, overlapping), [0]);
+        }
+    },
+
     "getMaxCapacity" : {
 
         "should find max with one restriction" : function() {
