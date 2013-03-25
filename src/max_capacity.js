@@ -12,21 +12,17 @@
             "capacity" : cap
         };
 
-        // Only add one is more restrictive
         if(this.restrictions.length == 0) this.restrictions.push(restriction);
         else {
-            // Is it non-intersecting with all
-            var superRangeIndex = -1;
-            for(var i = 0; i < this.restrictions.length; i++) {
-                // Not subrange, add it
-                if(this.isSubRange(this.restrictions[i], restriction)) {
-                    superRangeIndex = i;
-                    break;
-                }
-            }
+            // Is it non-intersecting with all other active restrictions?
+            var superRangeIndex = this.isSubRangeOfAll(this.restrictions, restriction);
+            // Not subrange
             if(superRangeIndex < 0) {
+
+                // Restriction is exclusive (does not affect others)
                 this.restrictions.push(restriction);
             }
+            // Is subrange, add it
             else if(this.isMoreRestrictive(this.restrictions[superRangeIndex], restriction)) {
                 this._addSubRange(superRangeIndex, restriction);
             }
@@ -79,6 +75,17 @@
                 this.restrictions.push(suffixRange);
             }
         }
+    };
+
+    Capacity.prototype.isSubRangeOfAll = function(restrictions, maybeSubRange) {
+        var superRangeIndex = -1;
+        for(var i = 0; i < this.restrictions.length; i++) {
+            if(this.isSubRange(this.restrictions[i], restriction)) {
+                superRangeIndex = i;
+                break;
+            }
+        }
+        return superRangeIndex;
     };
 
     Capacity.prototype.isSubRange = function(range, maybeSubRange) {
