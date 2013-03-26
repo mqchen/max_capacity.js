@@ -1,7 +1,7 @@
 (function(exports){
 
     var Capacity = function() {
-        this.allRestrictions = new Array();
+        this.originalRestrictions = new Array();
         this.restrictions = new Array();
     };
 
@@ -13,6 +13,94 @@
         };
     };
 
+
+    Capacity.prototype.addRestriction = function(fromIncl, toIncl, capacity) {
+        var restriction = this.createRestriction(fromIncl, toIncl, capacity);
+        
+        // Preserve original restriction
+        restriction.original = this.createRestriction(fromIncl, toIncl, capacity);
+        this.originalRestrictions.push(restriction.original);
+
+        // Get all intersecting restrictions
+        var intersectingIds = this.getIntersectingRestrictions(this.restrictions, restriction);
+
+        // Case 1, no intersecting
+        if(intersectingIds.length === 0) {
+            this.restrictions.push(restriction);
+        }
+        else {
+            for(var i = 0; i < intersectingIds.length; i++) {
+
+            }
+        }
+    };
+
+    Capacity.prototype.getIntersectingRestrictions = function(restrictions, restriction) {
+        var intersectingIds = new Array();
+        for(var i = 0; i < restrictions.length; i++) {
+            if(this.isIntersecting(restrictions[i], restriction)) {
+                intersectingIds.push(i);
+            }
+        }
+        return intersectingIds;
+    };
+
+    Capacity.prototype.isIntersecting = function(restriction, maybeIntersecting) {
+        return !(maybeIntersecting.toIncl <= restriction.fromIncl) && !(maybeIntersecting.fromIncl >= restriction.toIncl);
+    };
+
+    /**
+
+    100 = restriction
+     50 = intersecting
+    
+    Case: equal
+            -------100--------
+            --------50--------
+
+    Case: rightoverlap
+            -------100--------
+                      -----50-----
+
+    Case: leftoverlap
+            -------100--------
+        ----50----
+
+    Case: rightsub
+            -------100--------
+                    ----50----
+
+    Case: leftsub
+            -------100--------
+            ----50----
+
+    Case: middlesub
+            -------100--------
+                ---50---
+     */
+    Capacity.prototype.getIntersectingType = function(restriction, intersecting) {
+        if(restriction.fromIncl === intersecting.fromIncl && restriction.toIncl === intersecting.toIncl) {
+            return "equal";
+        }
+        if(restriction.fromIncl < intersecting.fromIncl && restriction.toIncl < intersecting.toIncl) {
+            return "rightoverlap";
+        }
+        if(restriction.fromIncl > intersecting.fromIncl && restriction.toIncl > intersecting.toIncl) {
+            return "leftoverlap";
+        }
+        if(restriction.fromIncl < intersecting.fromIncl && restriction.toIncl === intersecting.toIncl) {
+            return "rightsub";
+        }
+        if(restriction.fromIncl === intersecting.fromIncl && restriction.toIncl > intersecting.toIncl) {
+            return "leftsub";
+        }
+        if(restriction.fromIncl < intersecting.fromIncl && restriction.toIncl > intersecting.toIncl) {
+            return "middlesub";
+        }
+        return "nonintersecting";
+    };
+
+/*
     Capacity.prototype.addRestriction = function(fromIncl, toIncl, cap) {
         var restriction = this.createRestriction(fromIncl, toIncl, cap);
 
@@ -37,7 +125,7 @@
         // Add for reference
         this.allRestrictions.push(restriction);
     };
-
+/*
     Capacity.prototype._addSubRange = function(superRangeIndex, subRange) {
         if(this.isMoreRestrictive(this.restrictions[superRangeIndex], subRange)) {
             // It is subrange, replace/resize/split the more lenient subrange if this is more restrictive
@@ -77,7 +165,8 @@
             }
         }
     };
-
+*/
+/*
     Capacity.prototype.getOverlappingRanges = function(restrictions, maybeOverlapping) {
         
         var overlapsIds = new Array();
@@ -115,7 +204,7 @@
     Capacity.prototype.isMoreRestrictive = function(orgRestrict, newRestrict) {
         return this.isSubRange(orgRestrict, newRestrict) && newRestrict.capacity <= orgRestrict.capacity;
     };
-
+*/
     Capacity.prototype.getMaxCapacity = function() {
         var max = 0;
 
