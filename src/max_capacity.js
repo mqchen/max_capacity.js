@@ -5,12 +5,16 @@
         this.restrictions = new Array();
     };
 
-    Capacity.prototype.addRestriction = function(fromIncl, toIncl, cap) {
-        var restriction = {
+    Capacity.prototype.createRestriction = function(fromIncl, toIncl, capacity) {
+        return {
             "fromIncl" : fromIncl,
             "toIncl" : toIncl,
-            "capacity" : cap
+            "capacity" : capacity
         };
+    };
+
+    Capacity.prototype.addRestriction = function(fromIncl, toIncl, cap) {
+        var restriction = this.createRestriction(fromIncl, toIncl, cap);
 
         if(this.restrictions.length == 0) this.restrictions.push(restriction);
         else {
@@ -43,14 +47,9 @@
             this.restrictions[superRangeIndex] = subRange;
 
             // Part of superrange before subrange
-            var prefixRange = {
-                "fromIncl" : superRange.fromIncl,
-                "toIncl" : subRange.fromIncl
-            }
-            var suffixRange = {
-                "fromIncl" : subRange.toIncl,
-                "toIncl" : superRange.toIncl
-            }
+            var prefixRange = this.createRestriction(superRange.fromIncl, subRange.fromIncl);
+            var suffixRange = this.createRestriction(subRange.toIncl, superRange.toIncl);
+            
             // Calc capacity of prefix range
 
             // Both prefix and suffix are valid
