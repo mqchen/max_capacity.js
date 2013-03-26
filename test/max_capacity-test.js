@@ -143,6 +143,14 @@ buster.testCase("Max capacity test", {
             assert.equals(this.capacity.getMaxCapacity(), total);
         },
 
+        "should find mac capacity with equal intersecting restrictions" : function() {
+            this.capacity.addRestriction(1, 10, 100); // Should be replaced
+            this.capacity.addRestriction(11, 20, 100); // Keep
+            this.capacity.addRestriction(1, 10, 50); // Should replace first
+
+            assert.equals(this.capacity.getMaxCapacity(), 150);
+        },
+
         "//should find max capacity with 3 restrictions, 1 more restrictive (in range) subrange of another" : function() {
             this.capacity.addRestriction(1, 6, 100);
             this.capacity.addRestriction(7, 10, 100);

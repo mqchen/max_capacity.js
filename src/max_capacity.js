@@ -30,7 +30,16 @@
         }
         else {
             for(var i = 0; i < intersectingIds.length; i++) {
+                var intersectingId = intersectingIds[i];
+                var intersectingRestriction = this.restrictions[intersectingId];
+                var intersectingType = this.getIntersectingType(intersectingRestriction, restriction);
 
+                if(intersectingType === "equal") {
+                    // replace if more restrictive
+                    if(intersectingRestriction.capacity >= restriction.capacity) {
+                        this.restrictions[intersectingId] = restriction;
+                    }
+                }
             }
         }
     };
