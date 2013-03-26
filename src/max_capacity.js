@@ -34,11 +34,56 @@
                 var intersectingRestriction = this.restrictions[intersectingId];
                 var intersectingType = this.getIntersectingType(intersectingRestriction, restriction);
 
-                if(intersectingType === "equal") {
+                // equal
+                // bothoverlap
+                if(intersectingType === "equal" || intersectingType === "bothoverlap") {
                     // replace if more restrictive
-                    if(intersectingRestriction.capacity >= restriction.capacity) {
+                    if(intersectingRestriction.capacity > restriction.capacity) {
                         this.restrictions[intersectingId] = restriction;
                     }
+                }
+                // rightsub
+                else if(intersectingType === "rightsub") {
+                    if(intersectingRestriction.capacity > restriction.capacity) {
+                        this.restrictions.push(restriction);
+                        intersectingRestriction.toIncl = restriction.fromIncl - 1;
+                    }
+                }
+                // leftsub
+                else if(intersectingType === "leftsub") {
+                    if(intersectingRestriction.capacity > restriction.capacity) {
+                        this.restrictions.push(restriction);
+                        intersectingRestriction.fromIncl = restriction.toIncl + 1;
+                    }
+                }
+                // middlesub
+                else if(intersectingType === "middlesub") {
+                    if(intersectingRestriction.capacity > restriction.capacity) {
+                        this.restrictions.push(restriction);
+
+                        // Original becomes prefix
+                        var orgIntersectingToIncl = restriction.toIncl;
+                        intersectingRestriction.toIncl = restriction.fromIncl - 1;
+                        intersectingRestriction.capacity = (intersectingRestriction.capacity - restriction.capacity) / 2;
+
+                        // New suffix
+                        var suffix = this.createRestriction(restriction.toIncl + 1, orgIntersectingToIncl,
+                            intersectingRestriction.capacity);
+                        suffix.original = intersectingRestriction.original;
+                        this.restrictions.push(suffix);
+                    }
+                }
+                // rightoverlap
+                else if(intersectingType === "rightoverlap") {
+                    this.restrictions.push(restriction);
+                    // Resize intersecting restriction
+                    intersectingRestriction.toIncl = restriction.fromIncl - 1;
+                }
+                // leftoverlap
+                else if(intersectingType === "leftoverlap") {
+                    this.restrictions.push(restriction);
+                    // Resize intersecting restriction
+                    intersectingRestriction.fromIncl = restriction.toIncl + 1;
                 }
             }
         }

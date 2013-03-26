@@ -151,12 +151,60 @@ buster.testCase("Max capacity test", {
             assert.equals(this.capacity.getMaxCapacity(), total);
         },
 
-        "should find max capacity with equal intersecting restrictions" : function() {
+        "should find max capacity with 'equal' intersecting restrictions" : function() {
             this.capacity.addRestriction(1, 10, 100); // Should be replaced
             this.capacity.addRestriction(11, 20, 100); // Keep
             this.capacity.addRestriction(1, 10, 50); // Should replace first
 
             assert.equals(this.capacity.getMaxCapacity(), 150);
+        },
+
+        "should find max capacity with 'bothoverlap' restriction" : function() {
+            this.capacity.addRestriction(5, 7, 100); // Should be replaced
+            this.capacity.addRestriction(1, 2, 100); // Keep
+            this.capacity.addRestriction(3, 10, 50); // Should replace first
+
+            assert.equals(this.capacity.getMaxCapacity(), 150);
+        },
+
+        "should find max capacity with 'rightsub' restriction" : function() {
+            this.capacity.addRestriction(1, 10, 100); // Should be resized
+            this.capacity.addRestriction(11, 20, 100); // Keep
+            this.capacity.addRestriction(9, 10, 50); // Keep
+
+            assert.equals(this.capacity.getMaxCapacity(), 250);
+        },
+        
+        "should find max capacity with 'leftsub' restriction" : function() {
+            this.capacity.addRestriction(1, 10, 100); // Should be resized
+            this.capacity.addRestriction(11, 20, 100); // Keep
+            this.capacity.addRestriction(1, 3, 50); // Keep
+
+            assert.equals(this.capacity.getMaxCapacity(), 250);
+        },
+        
+        "should find max capacity with 'middlesub' restriction" : function() {
+            this.capacity.addRestriction(1, 10, 100); // Should be split and resized
+            this.capacity.addRestriction(11, 20, 100); // Keep
+            this.capacity.addRestriction(3, 5, 50); // Keep
+
+            assert.equals(this.capacity.getMaxCapacity(), 200);
+        },
+
+        "should find max capacity with 'rightoverlap' restriction" : function() {
+            this.capacity.addRestriction(1, 5, 100); // Should be split and resized
+            this.capacity.addRestriction(11, 20, 100); // Keep
+            this.capacity.addRestriction(3, 7, 50); // Keep
+
+            assert.equals(this.capacity.getMaxCapacity(), 250);
+        },
+
+        "should find max capacity with 'leftoverlap' restriction" : function() {
+            this.capacity.addRestriction(5, 10, 100); // Should be split and resized
+            this.capacity.addRestriction(11, 20, 100); // Keep
+            this.capacity.addRestriction(3, 7, 50); // Keep
+
+            assert.equals(this.capacity.getMaxCapacity(), 250);
         },
 
         "//should find max capacity with 3 restrictions, 1 more restrictive (in range) subrange of another" : function() {
