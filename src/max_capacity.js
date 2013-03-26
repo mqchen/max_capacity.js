@@ -29,8 +29,8 @@
             this.restrictions.push(restriction);
         }
         else {
-            for(var i = 0; i < intersectingIds.length; i++) {
-                var intersectingId = intersectingIds[i];
+            if(intersectingIds.length === 1) {
+                var intersectingId = intersectingIds[0];
                 var intersectingRestriction = this.restrictions[intersectingId];
                 var intersectingType = this.getIntersectingType(intersectingRestriction, restriction);
 
@@ -87,6 +87,10 @@
                     // Resize intersecting restriction
                     intersectingRestriction.fromIncl = restriction.toIncl + 1;
                 }
+            }
+            else if(intersectingIds.length === 2) {
+                // Both left and right overlap
+                throw new RangeError("This restriction overlaps two active restrictions, which is not supported.");
             }
         }
     };
@@ -165,6 +169,7 @@
 
 
     Capacity.prototype.getMaxCapacity = function(fromIncl, toIncl) {
+        if(fromIncl !== undefined || toIncl !== undefined) throw new RangeError("Query on range is not supported");
         fromIncl = (fromIncl === undefined) ? Number.MIN_VALUE : fromIncl;
         toIncl = (toIncl === undefined) ? Number.MAX_VALUE : toIncl;
         var queryRange = this.createRestriction(fromIncl, toIncl);
