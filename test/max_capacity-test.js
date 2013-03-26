@@ -172,7 +172,7 @@ buster.testCase("Max capacity test", {
             this.capacity.addRestriction(11, 20, 100); // Keep
             this.capacity.addRestriction(9, 10, 50); // Keep
 
-            assert.equals(this.capacity.getMaxCapacity(), 250);
+            assert.equals(this.capacity.getMaxCapacity(), 200);
         },
         
         "should find max capacity with 'leftsub' restriction" : function() {
@@ -180,7 +180,7 @@ buster.testCase("Max capacity test", {
             this.capacity.addRestriction(11, 20, 100); // Keep
             this.capacity.addRestriction(1, 3, 50); // Keep
 
-            assert.equals(this.capacity.getMaxCapacity(), 250);
+            assert.equals(this.capacity.getMaxCapacity(), 200);
         },
         
         "should find max capacity with 'middlesub' restriction" : function() {
@@ -207,7 +207,7 @@ buster.testCase("Max capacity test", {
             assert.equals(this.capacity.getMaxCapacity(), 250);
         },
 
-        "//should find max capacity with 3 restrictions, 1 more restrictive (in range) subrange of another" : function() {
+        "should find max capacity with 3 restrictions, 1 more restrictive (in range) subrange of another" : function() {
             this.capacity.addRestriction(1, 6, 100);
             this.capacity.addRestriction(7, 10, 100);
             this.capacity.addRestriction(1, 5, 100); // This should be considered
@@ -215,7 +215,7 @@ buster.testCase("Max capacity test", {
             assert.equals(this.capacity.getMaxCapacity(), 200);
         },
 
-        "//should find max capacity with 3 restrictions, 1 more restrictive (in capacity only) subrange of another" : function() {
+        "should find max capacity with 3 restrictions, 1 more restrictive (in capacity only) subrange of another" : function() {
             this.capacity.addRestriction(1, 6, 100);
             this.capacity.addRestriction(7, 10, 100);
             this.capacity.addRestriction(1, 6, 50); // This should be considered
@@ -223,7 +223,7 @@ buster.testCase("Max capacity test", {
             assert.equals(this.capacity.getMaxCapacity(), 150);
         },
 
-        "//should find max capacity with 3 restrictions, 1 more restrictive (in capacity and range - creates suffix range) subrange of another" : function() {
+        "should find max capacity with 3 restrictions, 1 more restrictive (in capacity and range - creates suffix range) subrange of another" : function() {
             this.capacity.addRestriction(1, 6, 100);
             this.capacity.addRestriction(7, 10, 100);
             this.capacity.addRestriction(1, 5, 50); // This should be considered, and first should be shifted down to 50
@@ -231,7 +231,7 @@ buster.testCase("Max capacity test", {
             assert.equals(this.capacity.getMaxCapacity(), 200);
         },
 
-        "//should find max capacity with 3 restrictions, 1 more restrictive (in capacity and range - creates prefix range) subrange of another" : function() {
+        "should find max capacity with 3 restrictions, 1 more restrictive (in capacity and range - creates prefix range) subrange of another" : function() {
             this.capacity.addRestriction(1, 6, 100);
             this.capacity.addRestriction(7, 10, 100);
             this.capacity.addRestriction(2, 6, 50); // This should be considered, and first should be shifted down to 50
@@ -239,7 +239,7 @@ buster.testCase("Max capacity test", {
             assert.equals(this.capacity.getMaxCapacity(), 200);
         },
 
-        "//should find max capacity with 3 restrictions, 1 more restrictive (in capacity and range - creates prefix and suffix range) subrange of another" : function() {
+        "should find max capacity with 3 restrictions, 1 more restrictive (in capacity and range - creates prefix and suffix range) subrange of another" : function() {
             this.capacity.addRestriction(1, 6, 100);
             this.capacity.addRestriction(7, 10, 100);
             this.capacity.addRestriction(2, 5, 50); // This should be considered, and first should be shifted down to 50
@@ -247,7 +247,7 @@ buster.testCase("Max capacity test", {
             assert.equals(this.capacity.getMaxCapacity(), 200);
         },
 
-        "//should find max capacity with 4 restrictions, 1 more restrictive subrange of another, and 1 more lenient subrange" : function() {
+        "should find max capacity with 4 restrictions, 1 more restrictive subrange of another, and 1 more lenient subrange" : function() {
             this.capacity.addRestriction(1, 6, 100);
             this.capacity.addRestriction(7, 10, 100);
             this.capacity.addRestriction(1, 5, 100); // This should be considered

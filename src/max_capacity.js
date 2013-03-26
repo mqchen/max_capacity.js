@@ -47,6 +47,7 @@
                     if(intersectingRestriction.capacity > restriction.capacity) {
                         this.restrictions.push(restriction);
                         intersectingRestriction.toIncl = restriction.fromIncl - 1;
+                        intersectingRestriction.capacity -= restriction.capacity;
                     }
                 }
                 // leftsub
@@ -54,6 +55,7 @@
                     if(intersectingRestriction.capacity > restriction.capacity) {
                         this.restrictions.push(restriction);
                         intersectingRestriction.fromIncl = restriction.toIncl + 1;
+                        intersectingRestriction.capacity -= restriction.capacity;
                     }
                 }
                 // middlesub
