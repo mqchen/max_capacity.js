@@ -75,6 +75,10 @@
             -------100--------
         ----50----
 
+    Case: bothoverlap
+            -------100--------
+        ------------50------------
+
     Case: rightsub
             -------100--------
                     ----50----
@@ -96,6 +100,9 @@
         }
         if(restriction.fromIncl > intersecting.fromIncl && restriction.toIncl > intersecting.toIncl) {
             return "leftoverlap";
+        }
+        if(restriction.fromIncl > intersecting.fromIncl && restriction.toIncl < intersecting.toIncl) {
+            return "bothoverlap"
         }
         if(restriction.fromIncl < intersecting.fromIncl && restriction.toIncl === intersecting.toIncl) {
             return "rightsub";

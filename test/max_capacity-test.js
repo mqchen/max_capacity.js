@@ -65,12 +65,13 @@ buster.testCase("Max capacity test", {
             this.capacity.addRestriction(1, 5, 100); // Should find this
             this.capacity.addRestriction(1, 3, 100); // Ignore this
             this.capacity.addRestriction(7, 10, 100); // Find this
+            this.capacity.addRestriction(5, 7, 100); // Find this
 
             var r = this.capacity.createRestriction(4, 8, 100);
 
             var intersecting = this.capacity.getIntersectingRestrictions(this.capacity.originalRestrictions, r);
 
-            assert.equals(intersecting, [0, 2]);
+            assert.equals(intersecting, [0, 2, 3]);
         }
     },
 
@@ -116,6 +117,13 @@ buster.testCase("Max capacity test", {
 
             assert.equals(this.capacity.getIntersectingType(r1, r2), "middlesub");
         },
+
+        "should find 'bothoverlap' intersecting type" : function() {
+            var r1 = this.capacity.createRestriction(2, 3, 100);
+            var r2 = this.capacity.createRestriction(1, 4, 50);
+
+            assert.equals(this.capacity.getIntersectingType(r1, r2), "bothoverlap");
+        }
     },
 
     "getMaxCapacity" : {
@@ -143,7 +151,7 @@ buster.testCase("Max capacity test", {
             assert.equals(this.capacity.getMaxCapacity(), total);
         },
 
-        "should find mac capacity with equal intersecting restrictions" : function() {
+        "should find max capacity with equal intersecting restrictions" : function() {
             this.capacity.addRestriction(1, 10, 100); // Should be replaced
             this.capacity.addRestriction(11, 20, 100); // Keep
             this.capacity.addRestriction(1, 10, 50); // Should replace first
