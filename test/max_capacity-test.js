@@ -225,7 +225,7 @@ buster.testCase("Max capacity test", {
             assert.equals(this.capacity.getMaxCapacity(), 100);
         },
 
-        "//should get max capacity within given range" : function() {
+        "should get max capacity within given range" : function() {
             this.capacity.addRestriction(1, 6, 100);
             this.capacity.addRestriction(7, 10, 100);
             this.capacity.addRestriction(1, 5, 100); // This should be considered
