@@ -39,3 +39,7 @@ This script also supports restrictions with ranges that overlap more than one re
     this.capacity.addRestriction(11, 20, 100); // Keep
 
     assert.equals(this.capacity.getMaxCapacity(), 250);
+
+# Run tests
+
+    buster test
